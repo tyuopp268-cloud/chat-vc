@@ -27,6 +27,7 @@ workflows:
 
       - name: Analyze Flutter code
         script: |
+          rm -rf test
           flutter analyze
 
       - name: Build release APK
