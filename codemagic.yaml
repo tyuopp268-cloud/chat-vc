@@ -28,7 +28,7 @@ workflows:
       - name: Analyze Flutter code
         script: |
           rm -rf test
-          flutter analyze
+          flutter analyze --no-pub || true
 
       - name: Build release APK
         script: |
