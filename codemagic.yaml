@@ -1,0 +1,37 @@
+workflows:
+  voice-lab-android:
+    name: Voice Lab Android APK
+    max_build_duration: 60
+    instance_type: mac_mini_m2
+
+    environment:
+      flutter: stable
+      java: 17
+
+    scripts:
+      - name: Generate Android project
+        script: |
+          flutter create --platforms=android --project-name voice_changer .
+
+      - name: Install native audio files
+        script: |
+          mkdir -p android/app/src/main/kotlin/com/example/voice_changer
+          cp native/AndroidManifest.xml android/app/src/main/AndroidManifest.xml
+          cp native/MainActivity.kt android/app/src/main/kotlin/com/example/voice_changer/MainActivity.kt
+          cp native/AudioService.kt android/app/src/main/kotlin/com/example/voice_changer/AudioService.kt
+          cp native/app-build.gradle android/app/build.gradle
+
+      - name: Get dependencies
+        script: |
+          flutter pub get
+
+      - name: Analyze Flutter code
+        script: |
+          flutter analyze
+
+      - name: Build release APK
+        script: |
+          flutter build apk --release
+
+    artifacts:
+      - build/app/outputs/flutter-apk/app-release.apk
